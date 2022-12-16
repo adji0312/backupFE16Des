@@ -1,0 +1,144 @@
+{
+  "user":{
+    "add": "Tambah Pengguna",
+    "list": "Daftar Pengguna",
+    "name": "NAMA PENGGUNA",
+    "action": "AKSI",
+    "form":{
+      "user_id": "User ID",
+      "user_name": "Nama Pengguna",
+      "choose_role": "Pilih Role",
+      "role_desc": "Deskripsi Role"
+    },
+    "edit": "Ubah Pengguna",
+    "detail": "Detail Pengguna",
+    "delete" : "Hapus Pengguna",
+    "delete_confirm": "Apakah Anda yakin ingin menghapus Pengguna"
+  },
+
+  "role":{
+    "add": "Tambah Role",
+    "list": "Daftar Role",
+    "table":{
+      "name": "NAMA ROLE",
+      "action": "AKSI",
+      "desc": "DESKRIPSI ROLE"
+    },
+    "form":{
+      "role_id": "Role ID",
+      "role_name": "Nama Role",
+      "role_desc": "Deskripsi Role"
+    },
+    "edit": "Ubah Role",
+    "detail": "Detail Role",
+    "delete" : "Hapus Role",
+    "delete_confirm": "Apakah Anda yakin ingin menghapus Role"
+  },
+
+  "project":{
+    "add": "Tambah Project",
+    "list": "Daftar Project",
+    "table":{
+      "app": "APLIKASI",
+      "type": "TIPE",
+      "code": "KODE",
+      "action": "AKSI"
+    },
+    "form":{
+      "app": "Aplikasi",
+      "type": "Tipe Project",
+      "choose_type": "Pilih Tipe Project",
+      "code": "Kode Project",
+      "bpro": "BPRO",
+      "status": "Status",
+      "desc": "Deskripsi",
+      "kick_off": "Kick Off"
+    },
+    "edit": "Ubah Project",
+    "detail": "Detail Project",
+    "delete": "Hapus Project",
+    "delete_confirm": "Apakah Anda yakin ingin menghapus Project"
+  },
+
+  "projectType":{
+    "add": "Tambah Project Type",
+    "list": "Daftar Project Type",
+    "table":{
+      "type": "TIPE PROJECT",
+      "desc": "DESKRIPSI TIPE PROJECT",
+      "action": "AKSI"
+    },
+    "form":{
+      "app": "Aplikasi",
+      "projectType_name": "Tipe Project",
+      "projectType_desc": "Deskripsi Tipe Project"
+    },
+    "edit": "Ubah Project Type",
+    "detail": "Detail Project Type",
+    "delete": "Hapus Project Type",
+    "delete_confirm": "Apakah Anda yakin ingin menghapus Project Type"
+  },
+
+  "backlogDev":{
+    "list": "Daftar Backlog Development",
+    "edit": "Ubah Backlog Development",
+    "form":{
+      "app": "Aplikasi",
+      "type": "Tipe Backlog Development",
+      "code": "Kode Backlog Development",
+      "bpro": "BPRO",
+      "desc": "Description",
+      "kickoff": "Kick Off",
+      "status": "Status",
+      "start": "Start Dev",
+      "end": "End Dev",
+      "choose_PM": "Pilih PIC PM",
+      "choose_Dev": "Pilih PIC Dev"
+    },
+    "detail": "Detail Backlog Development"
+  },
+
+  "application":{
+    "add" : "Tambah Application",
+    "list": "Daftar Application",
+    "edit": "Ubah Application",
+    "header":{
+      "application_name": "NAMA APPLICATION",
+      "application_device": "PERANGKAT APPLICATION",
+      "application_type": "JENIS APPLICATION",
+      "application_server": "SERVER APPLICATION",
+      "action" : "AKSI"
+    },
+    "form":{
+      "application_name": "Nama Application",
+      "application_device": "Perangkat Application",
+      "application_type": "Jenis Application",
+      "application_server": "Server Application"
+    },
+    "detail": "Detail Application"
+  },
+
+  "form":{
+    "created_by": "Dibuat oleh",
+    "modify_by": "Diubah oleh",
+    "created_date": "Tanggal dibuat",
+    "modify_date": "Tanggal diubah",
+    "validation_required": "wajib diisi",
+    "validation_maxlength": "Maksimal {{value}} karakter",
+    "invalid": " tidak valid"
+  },
+
+  "button":{
+    "close": "Tutup",
+    "save": "Simpan",
+    "save_changes": "Simpan perubahan",
+    "no": "Tidak",
+    "yes": "Iya"
+  },
+
+  "tooltip":{
+    "edit": "Ubah",
+    "delete": "Hapus",
+    "detail": "Detail"
+  }
+}

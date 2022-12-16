@@ -1,0 +1,144 @@
+{
+  "user":{
+    "add": "Add User",
+    "list": "User List",
+    "name": "USER NAME",
+    "action": "ACT",
+    "form":{
+      "user_id": "User ID",
+      "user_name": "User Name",
+      "choose_role": "Choose Role",
+      "role_desc": "Role Description"
+    },
+    "edit": "Edit User",
+    "detail": "User Details",
+    "delete" : "Delete User",
+    "delete_confirm": "Are you sure you want to delete User"
+  },
+
+  "role":{
+    "add": "Add Role",
+    "list": "Role List",
+    "table":{
+      "name": "ROLE NAME",
+      "action": "ACT",
+      "desc": "ROLE DESCRIPTION"
+    },
+    "form":{
+      "role_id": "Role ID",
+      "role_name": "Role Name",
+      "role_desc": "Role Description"
+    },
+    "edit": "Edit Role",
+    "detail": "Role Details",
+    "delete" : "Delete Role",
+    "delete_confirm": "Are you sure you want to delete Role"
+  },
+
+  "project":{
+    "add": "Add Project",
+    "list": "Project List",
+    "table":{
+      "app": "APPLICATION",
+      "type": "TYPE",
+      "code": "CODE",
+      "action": "ACT"
+    },
+    "form":{
+      "app": "Application",
+      "type": "Project Type",
+      "choose_type": "Choose Project Type",
+      "code": "Project Code",
+      "bpro": "BPRO",
+      "status": "Status",
+      "desc": "Description",
+      "kick_off": "Kick Off"
+    },
+    "edit": "Edit Project",
+    "detail": "Project Details",
+    "delete": "Delete Project",
+    "delete_confirm": "Are you sure you want to delete Project"
+  },
+
+  "projectType":{
+    "add": "Add Project Type",
+    "list": "Project Type List",
+    "table":{
+      "type": "PROJECT TYPE",
+      "desc": "PROJECT TYPE DESCRIPTION",
+      "action": "ACT"
+    },
+    "form":{
+      "app": "Application",
+      "projectType_name": "Project Type",
+      "projectType_desc": "Project Type Desc"
+    },
+    "edit": "Edit Project Type",
+    "detail": "Project Type Details",
+    "delete": "Delete Project Type",
+    "delete_confirm": "Are you sure you want to delete Project Type"
+  },
+
+  "backlogDev":{
+    "list": "Backlog Development List",
+    "edit": "Edit Backlog Development",
+    "form":{
+      "app": "Application",
+      "type": "Backlog Development Type",
+      "code": "Backlog Development Code",
+      "bpro": "BPRO",
+      "desc": "Description",
+      "kickoff": "Kick Off",
+      "status": "Status",
+      "start": "Start Dev",
+      "end": "End Dev",
+      "choose_PM": "Choose PIC PM",
+      "choose_Dev": "Choose PIC Dev"
+    },
+    "detail": "Backlog Development Details"
+  },
+
+  "application":{
+    "add" : "Add Application",
+    "list": "Application List",
+    "edit": "Edit Application",
+    "header": {
+      "application_name": "APPLICATION NAME",
+      "application_device": "APPLICATION DEVICE",
+      "application_type": "APPLICATION TYPE",
+      "application_server": "APPLICATION SERVER",
+      "action" : "ACT"
+    },
+    "form":{
+      "application_name": "Application Name",
+      "application_device": "Application Device",
+      "application_type": "Application Type",
+      "application_server": "Application Server"
+    },
+    "detail": "Application Details"
+  },
+
+  "form":{
+    "created_by": "Created By",
+    "modify_by": "Modify By",
+    "created_date": "Created Date",
+    "modify_date": "Modify Date",
+    "validation_required": "is required",
+    "validation_maxlength": "Maximum {{value}} characters",
+    "invalid": " is invalid"
+  },
+
+  "button":{
+    "close": "Close",
+    "save": "Save",
+    "save_changes": "Save changes",
+    "no": "No",
+    "yes": "Yes"
+  },
+
+  "tooltip":{
+    "edit": "Edit",
+    "delete": "Delete",
+    "detail": "Detail"
+  }
+}

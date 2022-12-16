@@ -1,0 +1,252 @@
+<app-sidebar></app-sidebar>
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <a href="/dashboard" class="text-decoration-none">
+          <h5 class="text" style="color: #949494;"><i class="fa fa-tachometer" style="color: #c9c9c9; font-size: 15pt;" aria-hidden="true"></i> Dashboard&nbsp; &nbsp;</h5>
+        </a>
+        <h5 style="color: #949494;"><i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp; &nbsp;{{ "role.list" | translate }}</h5>
+      </div>
+        <div class="container position-relative" id="main-container">
+          <div class="container p-2 border rounded shadow mt-4 bg-light">
+            <div class="d-flex justify-content-between border-bottom">
+              <h3 class="mx-2 mt-1">{{ "role.list" | translate }}</h3>
+              <button type="button" class="btn shadow m-2 mt-1 p-1" style="background-color: #0abe03; color: white;" (click)="onOpenModal(null!, 'add')" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                <small class="fs-7 p-1">{{ "role.add" | translate }}</small>
+              </button>
+            </div>
+            <table class="table table-lg table-striped table-hover position-static">
+              <thead>
+                <tr>
+                  <th scope="col">NO</th>
+                  <th scope="col">{{ "role.form.role_id" | translate }}</th>
+                  <th scope="col">{{ "role.table.name" | translate }}</th>
+                  <th scope="col">{{ "role.table.desc" | translate }}</th>
+                  <th scope="col">{{ "role.table.action" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let role of roles | paginate:{itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                  <th scope="row">{{ tableSize * (page - 1) + (i+1) }}</th>
+                  <td>{{role.role_id}}</td>
+                  <td>{{role.role_name}}</td>
+                  <td>{{role.role_desc}}</td>
+                  <td class="d-flex gap-3">
+                    <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"  tooltip="{{'tooltip.edit' | translate}}" [adaptivePosition]="false">
+                      <a (click)="onOpenModal(role, 'edit')" type="button" data-bs-target="#updateRoleModal"  data-bs-toggle="modal"><i class="fa fa-pencil"></i></a>
+                    </button>
+                    <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;" tooltip="{{'tooltip.delete' | translate}}" [adaptivePosition]="false">
+                      <a (click)="onOpenModal(role, 'delete')" type="button" data-bs-target="#deleteRoleModal" data-bs-toggle="modal"><i class="fa fa-trash"></i></a>
+                    </button>
+                    <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;" tooltip="{{'tooltip.detail' | translate}}" [adaptivePosition]="false">
+                      <a (click)="onOpenModal(role, 'view')" type="button" data-bs-target="#viewRoleModal" data-bs-toggle="modal"><i class="fa fa-eye"></i></a>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-end mt-3">
+              <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"></pagination-controls>
+            </div>
+          </div>
+
+          <!-- Add Role Modal -->
+          <div class="modal fade" id="addRoleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">{{ "role.add" | translate }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeAddRoleModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form [formGroup]="addRoleForm" (ngSubmit)="onAddRole()">
+                    <div class="form-group">
+                      <label for="role_id">{{ "role.form.role_id" | translate }}</label>
+                      <input type="text" name="role_id" formControlName="role_id" [ngClass]="{ 'is-invalid' : addRoleForm.controls['role_id'].touched && addRoleForm.controls['role_id'].errors}" class="form-control" id="role_id" placeholder="{{ 'role.form.role_id' | translate }}">
+                      <div *ngIf="addRoleForm.controls['role_id'].touched && addRoleForm.controls['role_id'].errors" class="text-danger">
+                        <div *ngIf="addRoleForm.controls['role_id'].touched && addRoleForm.controls['role_id'].errors['required']">
+                          {{ "role.form.role_id" | translate }} {{ "form.validation_required" | translate }}
+                        </div>
+                        <div *ngIf="addRoleForm.controls['role_id'].touched && addRoleForm.controls['role_id'].errors['maxlength']">
+                          {{"form.validation_maxlength" | translate:({
+                            value: "10" | translate
+                          }) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="role_name">{{ "role.form.role_name" | translate }}</label>
+                      <input type="text" name="role_name" formControlName="role_name" [ngClass]="{ 'is-invalid' : addRoleForm.controls['role_name'].touched && addRoleForm.controls['role_name'].errors}" class="form-control" id="role_name" placeholder="{{ 'role.form.role_name' | translate }}">
+                      <div *ngIf="addRoleForm.controls['role_name'].touched && addRoleForm.controls['role_name'].errors" class="text-danger">
+                        <div *ngIf="addRoleForm.controls['role_name'].touched && addRoleForm.controls['role_name'].errors['required']">
+                          {{ "role.form.role_name" | translate }} {{ "form.validation_required" | translate }}
+                        </div>
+                        <div *ngIf="addRoleForm.controls['role_name'].touched && addRoleForm.controls['role_name'].errors['maxlength']">
+                          {{"form.validation_maxlength" | translate:({
+                            value: "15" | translate
+                          }) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="role_desc">{{ "role.form.role_desc" | translate }}</label>
+                      <input type="text" name="role_desc" formControlName="role_desc" [ngClass]="{ 'is-invalid' : addRoleForm.controls['role_desc'].touched && addRoleForm.controls['role_desc'].errors}" class="form-control" id="role_desc" placeholder="{{ 'role.form.role_desc' | translate }}">
+                      <div *ngIf="addRoleForm.controls['role_desc'].touched && addRoleForm.controls['role_desc'].errors" class="text-danger">
+                        <div *ngIf="addRoleForm.controls['role_desc'].touched && addRoleForm.controls['role_desc'].errors['required']">
+                          {{ "role.form.role_desc" | translate }}  {{ "form.validation_required" | translate }}
+                        </div>
+                        <div *ngIf="addRoleForm.controls['role_desc'].touched && addRoleForm.controls['role_desc'].errors['maxlength']">
+                          {{"form.validation_maxlength" | translate:({
+                            value: "25" | translate
+                          }) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer p-0 m-0">
+                      <button type="button" id="add-role-form" class="mt-3 mb-0 btn btn-secondary bg-danger" (click)="closeAddRoleModal()" data-bs-dismiss="modal" style="border: none;"><i class=" fas fa-times"></i> {{ "button.close" | translate }}</button>
+                      <button [disabled]="addRoleForm.invalid" type="submit" class="mt-3 mb-0 btn text-white" style="background-color: #0abe03; border: none;"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ "button.save" | translate }}</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Update Role Modal -->
+          <div class="modal fade" id="updateRoleModal"  tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="updateRoleModal">{{ "role.edit" | translate }} {{editRole.role_name}}</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <form [formGroup]="editRoleForm" (ngSubmit)="onUpdateRole()">
+                        <div class="form-group">
+                           <label for="role_id"> {{ "role.form.role_id" | translate }}</label>
+                           <input type="text" name="role_id" formControlName="role_id" [ngClass]="{ 'is-invalid' : editRoleForm.controls['role_id'].touched && editRoleForm.controls['role_id'].errors}" class="form-control" id="role_id">
+                            <div *ngIf="editRoleForm.controls['role_id'].touched && editRoleForm.controls['role_id'].errors" class="text-danger">
+                              <div *ngIf="editRoleForm.controls['role_id'].touched && editRoleForm.controls['role_id'].errors['required']">
+                                {{ "role.form.role_id" | translate }} {{ "form.validation_required" | translate }}
+                              </div>
+                              <div *ngIf="editRoleForm.controls['role_id'].touched && editRoleForm.controls['role_id'].errors['maxlength']">
+                                {{"form.validation_maxlength" | translate:({
+                                  value: "10" | translate
+                                }) }}
+                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role_name">{{ "role.form.role_name" | translate }}</label>
+                            <input type="text" name="role_name" formControlName="role_name" [ngClass]="{ 'is-invalid' : editRoleForm.controls['role_name'].touched && editRoleForm.controls['role_name'].errors}" class="form-control" id="role_name">
+                              <div *ngIf="editRoleForm.controls['role_name'].touched && editRoleForm.controls['role_name'].errors" class="text-danger">
+                                <div *ngIf="editRoleForm.controls['role_name'].touched && editRoleForm.controls['role_name'].errors['required']">
+                                  {{ "role.form.role_name" | translate }} {{ "form.validation_required" | translate }}
+                                </div>
+                                <div *ngIf="editRoleForm.controls['role_name'].touched && editRoleForm.controls['role_name'].errors['maxlength']">
+                                  {{"form.validation_maxlength" | translate:({
+                                    value: "15" | translate
+                                  }) }}
+                                </div>
+                              </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role_desc">{{ "role.form.role_desc" | translate }}</label>
+                            <input type="text" name="role_desc" formControlName="role_desc" [ngClass]="{ 'is-invalid' : editRoleForm.controls['role_desc'].touched && editRoleForm.controls['role_desc'].errors}" class="form-control" id="role_desc">
+                            <div *ngIf="editRoleForm.controls['role_desc'].touched && editRoleForm.controls['role_desc'].errors" class="text-danger">
+                              <div *ngIf="editRoleForm.controls['role_desc'].touched && editRoleForm.controls['role_desc'].errors['required']">
+                                {{ "role.form.role_desc" | translate }}  {{ "form.validation_required" | translate }}
+                              </div>
+                              <div *ngIf="editRoleForm.controls['role_desc'].touched && editRoleForm.controls['role_desc'].errors['maxlength']">
+                                {{"form.validation_maxlength" | translate:({
+                                  value: "25" | translate
+                                }) }}
+                              </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer p-0 m-0">
+                           <button type="button" id="edit-role-form" data-bs-dismiss="modal" class="mt-3 mb-0 btn btn-secondary bg-danger" style="border: none;"><i class=" fas fa-times"></i> {{ "button.close" | translate }}</button>
+                           <button [disabled]="editRoleForm.invalid || !editRoleForm.dirty" type="submit" style="background-color: #0abe03; border: none;" class="mt-3 mb-0 btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ "button.save_changes" | translate }}</button>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          <!-- Delete Role Modal -->
+          <div class="modal fade" id="deleteRoleModal"  tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="deleteModelLabel">{{ "role.delete" | translate }}</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <p>{{ "role.delete_confirm" | translate }} {{deleteRole.role_name}} ?</p>
+                     <div class="modal-footer p-0 m-0">
+                        <button type="button" id="delete-role" class="mt-3 mb-0 btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ "button.no" | translate }}</button>
+                        <button (click)="onDeleteRole(deleteRole.id)" class="mt-3 mb-0 btn btn-danger" data-dismiss="modal"><i class="fas fa-check"></i> {{ "button.yes" | translate }}</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          <!-- View Role Modal -->
+          <div class="modal fade" id="viewRoleModal"  tabindex="-1" user="dialog" aria-hidden="true">
+            <div class="modal-dialog" user="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewUserModal">{{ "role.detail" | translate }} {{viewRole.role_id}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                        <label for="user_id">{{ "role.form.role_id" | translate }}</label>
+                        <input type="text" [value]="viewRole.role_id" name="role_id" class="form-control" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name">{{ "role.form.role_name" | translate }}</label>
+                        <input type="text" [value]="viewRole.role_name" name="role_name" class="form-control" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_name">{{ "role.form.role_desc" | translate }}</label>
+                        <input type="text" [value]="viewRole.role_desc" name="role_desc" class="form-control" disabled>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3 mb-3">
+                        <div class="form-group">
+                          <label for="created_by">{{ "form.created_by" | translate }}</label>
+                          <input type="text" [value]="viewRole.created_by" name="created_by" class="form-control" id="created_by" disabled>
+                        </div>
+                        <div class="form-group">
+                          <label for="modify_by">{{ "form.modify_by" | translate }}</label>
+                          <input type="text" [value]="viewRole.modify_by" name="modify_by" class="form-control" id="modify_by" disabled>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                      <div class="form-group">
+                        <label for="created_date">{{ "form.created_date" | translate }}</label>
+                        <input type="text" [value]="viewRole.created_date | date: 'dd MMM yyyy  HH:mm:ss'" name="created_date" class="form-control" id="created_date" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label for="modify_date">{{ "form.modify_date" | translate }}</label>
+                        <input type="text" [value]="viewRole.modify_date | date: 'dd MMM yyyy  HH:mm:ss'"name="modify_date" class="form-control" id="modify_date" disabled>
+                      </div>
+                    </div>
+                    <div class="modal-footer p-0 m-0">
+                      <button type="button" id="edit-user-form" data-bs-dismiss="modal" class="mt-3 mb-0 btn btn-secondary bg-danger" style="border: none;"><i class=" fas fa-times"></i> {{ "button.close" | translate }}</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+  </div>
+</div>
+
+

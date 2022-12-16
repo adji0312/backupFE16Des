@@ -1,0 +1,435 @@
+<app-sidebar></app-sidebar>
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <a href="/dashboard" class="text-decoration-none">
+          <h5 class="text" style="color: #949494;"><i class="fa fa-tachometer" style="color: #c9c9c9; font-size: 15pt;"
+              aria-hidden="true"></i> Dashboard&nbsp; &nbsp;</h5>
+        </a>
+        <h5 style="color: #949494;"><i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp; &nbsp; {{ "project.list" | translate }}</h5>
+      </div>
+
+      <div class="container position-relative" id="main-container">
+        <div class="container p-2 border rounded shadow mt-4 bg-light">
+          <div class="d-flex justify-content-between border-bottom">
+            <h3 class="mx-2 mt-1">{{ "project.list" | translate }}</h3>
+            <button type="button" class="btn shadow m-2 mt-1 p-1" style="background-color: #0abe03; color: white;"
+              data-bs-toggle="modal" data-bs-target="#addProjectModal" (click)="onOpenModal(null!, 'add')">
+              <small class="fs-7 p-1">{{ "project.add" | translate }}</small>
+            </button>
+          </div>
+
+          <table class="table table-lg table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">NO</th>
+                <th scope="col">{{ "project.table.app" | translate }}</th>
+                <th scope="col">{{ "project.table.type" | translate }}</th>
+                <th scope="col">{{ "project.table.code" | translate }}</th>
+                <th scope="col">BPRO</th>
+                <th scope="col">STATUS</th>
+                <th scope="col">{{ "project.table.action" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let project of projects | paginate:{itemsPerPage: tableSize, currentPage: page, totalItems: count}, let i = index">
+                <th scope="row">{{tableSize * (page - 1) + i+1}}</th>
+                <td>{{project.application}}</td>
+                <td>{{project.project_type}}</td>
+                <td>{{project.project_code}}</td>
+                <td>{{project.project_bpro}}</td>
+                <td>{{project.project_status}}</td>
+                <td class="d-flex gap-3">
+                  <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"
+                    tooltip="{{ 'tooltip.edit' | translate }}" [adaptivePosition]="false">
+                    <a (click)="onOpenModal(project, 'edit')" type="button" data-bs-target="#updateProjectModal"
+                      data-bs-toggle="modal"><i class="fa fa-pencil"></i></a>
+                  </button>
+                  <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"
+                    tooltip="{{ 'tooltip.delete' | translate }}" [adaptivePosition]="false">
+                    <a (click)="onOpenModal(project, 'delete')" type="button" data-bs-target="#deleteProjectModal"
+                      data-bs-toggle="modal"><i class="fa fa-trash"></i></a>
+                  </button>
+                  <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"
+                    tooltip="{{ 'tooltip.detail' | translate }}" [adaptivePosition]="false">
+                    <a (click)="onOpenModal(project, 'view')" type="button" data-bs-target="#viewProjectModal"
+                      data-bs-toggle="modal"><i class="fa fa-eye"></i></a>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end mt-3">
+            <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+            </pagination-controls>
+          </div>
+        </div>
+
+        <!-- ADD PROJECT MODAL -->
+        <div class="modal fade" id="addProjectModal"  tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ "project.add" | translate }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="onCloseAddProjectModal()"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="addProjectForm" (ngSubmit)="onAddProject()">
+                  <div class="form-group">
+                    <label for="application">{{ "project.form.app" | translate }}</label>
+                    <input type="text" name="application" formControlName="application"
+                      [ngClass]="{ 'is-invalid' : addProjectForm.controls['application'].touched && addProjectForm.controls['application'].errors}"
+                      class="form-control" id="application" placeholder=" {{ 'project.form.app' | translate }}">
+                    <div
+                      *ngIf="addProjectForm.controls['application'].touched && addProjectForm.controls['application'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="addProjectForm.controls['application'].touched && addProjectForm.controls['application'].errors['required']">
+                        {{ "project.form.app" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="addProjectForm.controls['application'].touched && addProjectForm.controls['application'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "10" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_type">{{ "project.form.type" | translate }}</label>
+                    <select class="input-group form-select" formControlName="project_type" name="project_type" [ngClass]="{ 'is-invalid' : addProjectForm.controls['project_type'].touched && addProjectForm.controls['project_type'].errors}">
+                      <option [value]="null" disabled>--{{ "project.form.choose_type" | translate }}--</option>
+                      <option *ngFor= "let type of projectTypes" [ngValue]="type.project_type">
+                        {{type.project_type}}
+                      </option>
+                    </select>
+                    <div *ngIf="addProjectForm.controls['project_type'].touched && addProjectForm.controls['project_type'].errors" class="text-danger">
+                      <div *ngIf="addProjectForm.controls['project_type'].touched && addProjectForm.controls['project_type'].errors['required']">
+                        {{ "project.form.type" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="addProjectForm.controls['project_type'].touched && addProjectForm.controls['project_type'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "6" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_bpro">{{ "project.form.bpro" | translate }}</label>
+                    <input type="text" name="project_bpro" formControlName="project_bpro"
+                      [ngClass]="{ 'is-invalid' : addProjectForm.controls['project_bpro'].touched && addProjectForm.controls['project_bpro'].errors}"
+                      class="form-control" id="project_bpro" placeholder="{{ 'project.form.bpro' | translate }}">
+                    <div
+                      *ngIf="addProjectForm.controls['project_bpro'].touched && addProjectForm.controls['project_bpro'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="addProjectForm.controls['project_bpro'].touched && addProjectForm.controls['project_bpro'].errors['required']">
+                        {{ "project.form.bpro" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="addProjectForm.controls['project_bpro'].touched && addProjectForm.controls['project_bpro'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "15" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_desc">{{ "project.form.desc" | translate }}</label>
+                    <textarea name="project_desc" formControlName="project_desc"
+                      [ngClass]="{ 'is-invalid' : addProjectForm.controls['project_desc'].touched && addProjectForm.controls['project_desc'].errors}"
+                      class="form-control" id="project_desc"
+                      placeholder="{{ 'project.form.desc' | translate }}"></textarea>
+                    <div
+                      *ngIf="addProjectForm.controls['project_desc'].touched && addProjectForm.controls['project_desc'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="addProjectForm.controls['project_desc'].touched && addProjectForm.controls['project_desc'].errors['required']">
+                        {{ "project.form.desc" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="addProjectForm.controls['project_desc'].touched && addProjectForm.controls['project_desc'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "100" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_kickoff">{{ "project.form.kick_off" | translate }}</label>
+                    <input type="date" name="project_kickoff" formControlName="project_kickoff"
+                      [ngClass]="{ 'is-invalid' : addProjectForm.controls['project_kickoff'].touched && addProjectForm.controls['project_kickoff'].errors}"
+                      class="form-control" id="project_kickoff" placeholder="{{ 'project.form.kick_off' | translate }}"
+                      min="{{currentDate | date:'yyyy-MM-dd'}}">
+                    <div
+                      *ngIf="addProjectForm.controls['project_kickoff'].touched && addProjectForm.controls['project_kickoff'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="addProjectForm.controls['project_kickoff'].touched && addProjectForm.controls['project_kickoff'].errors['required']">
+                        {{ "project.form.kick_off" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer p-0 m-0">
+                    <button type="button" id="add-project-form" (click)="onCloseAddProjectModal()"
+                      class="mt-3 mb-0 btn btn-secondary bg-danger" data-bs-dismiss="modal" style="border: none;"><i class=" fas fa-times"></i> {{
+                      "button.close" | translate }}</button>
+                    <button [disabled]="addProjectForm.invalid" type="submit" class="mt-3 mb-0 btn text-white"
+                      style="background-color: #0abe03; border: none;"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                      {{ "button.save" | translate }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDIT PROJECT MODAL -->
+        <div class="modal fade" id="updateProjectModal"  tabindex="-1" user="dialog" aria-hidden="true">
+          <div class="modal-dialog" user="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="updateProjectModal">{{ "project.edit" | translate }} {{editProject.application}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="editProjectForm" (ngSubmit)="onUpdateProject()">
+                  <div class="form-group">
+                    <label for="application">{{ "project.form.app" | translate }}</label>
+                    <input type="text" name="application"
+                      formControlName="application"
+                      [ngClass]="{ 'is-invalid' : editProjectForm.controls['application'].touched && editProjectForm.controls['application'].errors}"
+                      class="form-control" id="application">
+                    <div
+                      *ngIf="editProjectForm.controls['application'].touched && editProjectForm.controls['application'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="editProjectForm.controls['application'].touched && editProjectForm.controls['application'].errors['required']">
+                        {{ "project.form.app" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="editProjectForm.controls['application'].touched && editProjectForm.controls['application'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "10" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_type">{{ "project.form.type" | translate }}</label>
+                      <select class="input-group form-select" formControlName="project_type" name="project_type" [ngClass]="{ 'is-invalid' : addProjectForm.controls['project_type'].touched && addProjectForm.controls['project_type'].errors}">
+                        <option *ngFor= "let type of projectTypes" [ngValue]="type.project_type">
+                          {{type.project_type}}
+                        </option>
+                      </select>
+                    <div
+                      *ngIf="editProjectForm.controls['project_type'].touched && editProjectForm.controls['project_type'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="editProjectForm.controls['project_type'].touched && editProjectForm.controls['project_type'].errors['required']">
+                        {{ "project.form.type" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="editProjectForm.controls['project_type'].touched && editProjectForm.controls['project_type'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "6" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_code">{{ "project.form.code" | translate }}</label>
+                    <input type="text" formControlName="project_code" name="project_code" class="form-control">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_bpro">{{ "project.form.bpro" | translate }}</label>
+                    <input type="text" name="project_bpro"
+                      formControlName="project_bpro"
+                      [ngClass]="{ 'is-invalid' : editProjectForm.controls['project_bpro'].touched && editProjectForm.controls['project_bpro'].errors}"
+                      class="form-control" id="project_bpro">
+                    <div
+                      *ngIf="editProjectForm.controls['project_bpro'].touched && editProjectForm.controls['project_bpro'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="editProjectForm.controls['project_bpro'].touched && editProjectForm.controls['project_bpro'].errors['required']">
+                        {{ "project.form.bpro" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="editProjectForm.controls['project_bpro'].touched && editProjectForm.controls['project_bpro'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "15" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_desc">{{ "project.form.desc" | translate }}</label>
+                    <textarea name="project_desc" formControlName="project_desc"
+                      [ngClass]="{ 'is-invalid' : editProjectForm.controls['project_desc'].touched && editProjectForm.controls['project_desc'].errors}"
+                      class="form-control" id="project_desc"></textarea>
+                    <div
+                      *ngIf="editProjectForm.controls['project_desc'].touched && editProjectForm.controls['project_desc'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="editProjectForm.controls['project_desc'].touched && editProjectForm.controls['project_desc'].errors['required']">
+                        {{ "project.form.desc" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                      <div
+                        *ngIf="editProjectForm.controls['project_desc'].touched && editProjectForm.controls['project_desc'].errors['maxlength']">
+                        {{"form.validation_maxlength" | translate:({
+                        value: "100" | translate
+                        }) }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="project_kickoff">{{ "project.form.kick_off" | translate }}</label>
+                    <input type="date" name="project_kickoff"
+                      formControlName="project_kickoff"
+                      [ngClass]="{ 'is-invalid' : editProjectForm.controls['project_kickoff'].touched && editProjectForm.controls['project_kickoff'].errors}"
+                      class="form-control" id="project_kickoff" min="{{currentDate | date:'yyyy-MM-dd'}}">
+                    <div
+                      *ngIf="editProjectForm.controls['project_kickoff'].touched && editProjectForm.controls['project_kickoff'].errors"
+                      class="text-danger">
+                      <div
+                        *ngIf="editProjectForm.controls['project_kickoff'].touched && editProjectForm.controls['project_kickoff'].errors['required']">
+                        {{ "project.form.kick_off" | translate }} {{ "form.validation_required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer p-0 m-0">
+                    <button type="button" id="edit-project-form" data-bs-dismiss="modal"
+                      class="mt-3 mb-0 btn btn-secondary bg-danger" style="border: none;"><i class=" fas fa-times"></i> {{ "button.close" | translate }}</button>
+                    <button [disabled]="editProjectForm.invalid || !editProjectForm.dirty" type="submit" class="mt-3 mb-0 btn text-white"
+                      style="background-color: #0abe03; border: none;"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                      {{ "button.save_changes" | translate }}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DELETE PROJECT MODAL -->
+        <div class="modal fade" id="deleteProjectModal"  tabindex="-1" user="dialog" aria-labelledby="deleteModelLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" user="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModelLabel">{{ "project.delete" | translate }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>{{ "project.delete_confirm" | translate }} {{deleteProject.project_code}} ?</p>
+                <div class="modal-footer p-0 m-0">
+                  <button type="button" id="delete-project" class="mt-3 mb-0 btn btn-secondary" data-bs-dismiss="modal"
+                    style="border: none;"><i class="fas fa-times"></i> {{ "button.no" | translate }}</button>
+                  <button (click)="onDeleteProject(deleteProject.id)" class="mt-3 mb-0 btn btn-danger"
+                    data-dismiss="modal" style="border: none;"><i class="fas fa-check"></i> {{
+                    "button.yes" | translate }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW PROJECT MODAL -->
+        <div class="modal fade" id="viewProjectModal" tabindex="-1" user="dialog" aria-hidden="true">
+          <div class="modal-dialog" user="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="viewProjectModal">{{ "project.detail" | translate }} {{viewProject.application}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="application">{{ "project.form.app" | translate }}</label>
+                    <input type="text" [value]="viewProject.application" name="application" class="form-control"
+                      disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_type">{{ "project.form.type" | translate }}</label>
+                    <input type="text" [value]="viewProject.project_type" name="project_type" class="form-control"
+                      disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_code">{{ "project.form.code" | translate }}</label>
+                    <input type="text" [value]="viewProject.project_code" name="project_code" class="form-control"
+                      disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_bpro">{{ "project.form.bpro" | translate }}</label>
+                    <input type="text" [value]="viewProject.project_bpro" name="project_bpro" class="form-control"
+                      disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_status">{{ "project.form.status" | translate }}</label>
+                    <input type="text" [value]="viewProject.project_status" name="project_status"
+                      class="form-control" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_Description">{{ "project.form.desc" | translate }}</label>
+                    <textarea [value]="viewProject.project_desc" name="project_Description" class="form-control"
+                      disabled></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="project_kickoff">{{ "project.form.kick_off" | translate }}</label>
+                    <input type="text" [value]="viewProject.project_kickoff| date: 'dd MMMM yyyy'" name="project_kickoff"
+                      class="form-control" disabled>
+                  </div>
+                  <div class="d-flex justify-content-between mt-3 mb-3">
+                    <div class="form-group">
+                      <label for="created_by">{{ "form.created_by" | translate }}</label>
+                      <input type="text" [value]="viewProject.created_by" name="created_by" class="form-control"
+                        id="created_by" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label for="modify_by">{{ "form.modify_by" | translate }}</label>
+                      <input type="text" [value]="viewProject.modify_by" name="modify_by" class="form-control"
+                        id="modify_by" disabled>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mb-3">
+                    <div class="form-group">
+                      <label for="created_date">{{ "form.created_date" | translate }}</label>
+                      <input type="text" [value]="viewProject.created_date | date: 'dd MMM yyyy  HH:mm:ss'"
+                        name="created_date" class="form-control" id="created_date" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label for="modify_date">{{ "form.modify_date" | translate }}</label>
+                      <input type="text" [value]="viewProject.modify_date | date: 'dd MMM yyyy  HH:mm:ss'"
+                        name="modify_date" class="form-control" id="modify_date" disabled>
+                    </div>
+                  </div>
+                  <div class="modal-footer p-0 m-0">
+                    <button type="button" id="edit-project-form" data-bs-dismiss="modal"
+                      class="mt-3 mb-0 btn btn-secondary bg-danger" style="border: none;">
+                      <i class=" fas fa-times"></i> {{ "button.close" | translate }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

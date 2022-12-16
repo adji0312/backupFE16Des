@@ -1,0 +1,62 @@
+<app-sidebar></app-sidebar>
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <a href="/dashboard" class="text-decoration-none">
+          <h5 class="text" style="color: #949494;"><i class="fa fa-tachometer" style="color: #c9c9c9; font-size: 15pt;"
+              aria-hidden="true"></i> Dashboard&nbsp; &nbsp;</h5>
+        </a>
+        <h5 style="color: #949494;"><i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp; &nbsp; {{
+          "backlogDev.list" | translate }}</h5>
+      </div>
+
+      <div class="container position-relative" id="main-container">
+        <div class="container p-2 border rounded shadow mt-4 bg-light">
+          <div class="d-flex justify-content-between border-bottom">
+            <h3 class="mx-2 mt-1">{{ "backlogDev.list" | translate }}</h3>
+          </div>
+          
+          <table class="table table-lg table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">NO</th>
+                <th scope="col">{{ "project.table.app" | translate }}</th>
+                <th scope="col">{{ "project.table.type" | translate }}</th>
+                <th scope="col">{{ "project.table.code" | translate }}</th>
+                <th scope="col">BPRO</th>
+                <th scope="col">STATUS</th>
+                <th scope="col">{{ "project.table.action" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let backlogDev of backlogDevs | paginate:{itemsPerPage: tableSize, currentPage: page, totalItems: count}, let i = index">
+                <th scope="row">{{tableSize * (page - 1) + i+1}}</th>
+                <td>{{backlogDev.application}}</td>
+                <td>{{backlogDev.backlog_type}}</td>
+                <td>{{backlogDev.backlog_code}}</td>
+                <td>{{backlogDev.backlog_bpro}}</td>
+                <td>{{backlogDev.backlog_status}}</td>
+                <td class="d-flex gap-3">
+                  <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"
+                    tooltip="{{ 'tooltip.edit' | translate }}" [adaptivePosition]="false" id="editTooltip">
+                    <a (click)="onOpenModal(backlogDev, 'edit')" type="button"><i class="fa fa-pencil"></i></a>
+                  </button>
+                  <button type="button" class="rounded-circle" style="background-color: #cdd2d6; border: none;"
+                    tooltip="{{ 'tooltip.detail' | translate }}" [adaptivePosition]="false">
+                    <a (click)="onOpenModal(backlogDev, 'view')" type="button"><i class="fa fa-eye"></i></a>
+                    </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end mt-3">
+            <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

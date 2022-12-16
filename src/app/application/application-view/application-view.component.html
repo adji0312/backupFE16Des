@@ -1,0 +1,105 @@
+<app-sidebar></app-sidebar>
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <a href="/dashboard" class="text-decoration-none">
+                    <h5 class="text" style="color: #949494;">
+                      <i class="fa fa-tachometer" style="color: #c9c9c9; font-size: 15pt;" aria-hidden="true"></i> Dashboard&nbsp; &nbsp;
+                    </h5>
+                  </a>
+                  <a href="/backlogDevelopment" class="text-decoration-none">
+                    <h5 style="color: #949494;">
+                      <i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp; &nbsp; View Application
+                    </h5>
+                </a>
+            </div>
+
+            <div class="container position-relative" id="main-container">
+                <div class="container p-2 border rounded shadow mt-4 mb-4 bg-light">
+                    <div class="d-flex justify-content-between border-bottom">
+                        <h3 class="mx-2 mt-1">View Application</h3>
+                    <button class="btn" style="border: none;" (click)="closeApplicationView()">
+                      <i class="iconx fas fa-times fs-5"></i>
+                    </button>
+                  </div>
+
+                  <form class="mx-2">
+                    <div class="d-flex flex-row gap-5 justify-content-center mb-4">
+                        <div style="width: 600px;">
+                            <div class="form-group mt-2">
+                                <label for="application_name" class="mb-1 fs-5"><b>Application Name</b></label>
+                                <input type="text" name="application_name" class="form-control" id="application_name" [value]="viewApplication.application_name" disabled>
+                            </div>
+
+                            
+
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Device</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let device of devices" class="">
+                                    <li class="mb-0 mx-2">{{device}}</li>
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Type</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let type of types" class="">
+                                    <li class="mb-0 mx-2">{{type}}</li>
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="" class="mb-1 fs-5"><b>Application Programming Language</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let progLang of progLangs" class="">
+                                    <li class="mb-0 mx-2">{{progLang}}</li>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Server</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let server of servers" class="">
+                                    <li class="mb-0 mx-2">{{server}}</li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="border-left:1px solid rgb(221, 221, 221);height: fit-content" class="my-4"></div>
+
+                        <div style="width: 600px;">
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Database</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let database of databases" class="">
+                                    <li class="mb-0 mx-2">{{database}}</li>
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Server</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let appServer of appServers" class="">
+                                    <li class="mb-0 mx-2">{{appServer}}</li>
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Operating System</b></label>
+                                <hr class="m-0" style="width: 50%;">
+                                <div *ngFor="let oprSystem of oprSystems" class="">
+                                    <li class="mb-0 mx-2">{{oprSystem}}</li>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label for="application_short_dsc" class="mb-1 fs-5"><b>Application Short Description</b></label>
+                                <textarea type="text" name="application_short_dsc" class="form-control" id="application_short_dsc" [value]="viewApplication.application_short_dsc" disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

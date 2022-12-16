@@ -1,0 +1,40 @@
+<div class="m-0 container d-flex justify-content-center align-items-center position-absolute h-100" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+  <div class="row justify-content-center">
+    <main class="form-signin m-auto" style="width: 80%;">
+      <div class="text-center d-flex flex-column align-items-center" style="background-color: #645CAA; border-top-left-radius: 10px; border-top-right-radius: 10px;" >
+        <h1 class="text-white mt-3 mb-0"><strong>User Login</strong></h1>
+        <small class="text-white fs-6">Project Management</small>
+        <img class="m-4 mt-0" src="https://www.bca.co.id/-/media/Feature/Card/List-Card/Tentang-BCA/Brand-Assets/Logo-BCA/Logo-BCA_Putih.png" alt="" width="190">
+      </div>
+      <form #userForm="ngForm" [formGroup]="loginForm" class="bg-light p-4 shadow" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        <div class="form-group mb-3 mt-3">
+          <div class="d-flex">
+            <span class="input-group-text" style="background-color: #f9f8ff;" id="inputGroup-sizing-default"><i class="fa fa-user" style="width: 17px;" aria-hidden="true"></i></span>
+            <input type="text" name="user_id" class="form-control" formControlName="user_id" [(ngModel)]="user.user_id" [ngClass]="{ 'is-invalid' : loginForm.controls['user_id'].touched && loginForm.controls['user_id'].errors}" id="user_id" placeholder="UserID">
+          </div>
+          <div *ngIf="loginForm.controls['user_id'].touched && loginForm.controls['user_id'].errors" class="text-danger">
+            <div *ngIf="loginForm.controls['user_id'].touched && loginForm.controls['user_id'].errors['required']">
+                User ID tidak boleh kosong
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-4 ">
+          <div class="d-flex">
+            <span class="input-group-text" style="background-color: #f9f8ff;" id="inputGroup-sizing-default"><i class="fa fa-key" aria-hidden="true"></i></span>
+            <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" [ngClass]="{ 'is-invalid' : loginForm.controls['password'].touched && loginForm.controls['password'].errors}" id="password" placeholder="Password">
+          </div>
+          <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors" class="text-danger">
+            <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors['required']">
+                Password tidak boleh kosong
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+          <button type="submit" (click)="loginUser(user)" class="btn text-white" style="background-color: #645CAA; height: auto; width: 500px;">Masuk</button>
+        </div>  
+      </form>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,147 @@
+<app-sidebar></app-sidebar>
+
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <a href="/dashboard" class="text-decoration-none">
+            <h5 class="text" style="color: #949494;">
+              <i class="fa fa-tachometer" style="color: #c9c9c9; font-size: 15pt;" aria-hidden="true"></i> Dashboard&nbsp; &nbsp;
+            </h5>
+          </a>
+          <a href="/backlogDevelopment" class="text-decoration-none">
+            <h5 style="color: #949494;">
+              <i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp; &nbsp; {{ "backlogDev.edit" | translate }}
+            </h5>
+          </a>
+      </div>
+
+      <div class="container position-relative" id="main-container">
+          <div class="container p-2 border rounded shadow mt-4 mb-4 bg-light">
+            <div class="d-flex justify-content-between border-bottom">
+                  <h3 class="mx-2 mt-1">{{ "backlogDev.edit" | translate }}</h3>
+              <button class="btn" style="border: none;" (click)="closeBacklogDevEdit()">
+                <i class="iconx fas fa-times fs-5"></i>
+              </button>
+            </div>
+            <form class="mx-2" [formGroup]="editBacklogDevForm" (ngSubmit)="onUpdateBacklogDevelopment()">
+              <div class="d-flex flex-row gap-5 justify-content-center mb-4">
+                  <div class="" style="width: 600px;">
+                    <div class="form-group">
+                      <label for="application">{{ "backlogDev.form.app" | translate }}</label>
+                      <input type="text" formControlName="application" name="application" class="form-control"
+                        id="application">
+                    </div>
+                    <div class="form-group">
+                      <label for="backlog_type">{{ "backlogDev.form.type" | translate }}</label>
+                      <input type="text" formControlName="backlog_type" name="backlog_type" class="form-control"
+                        id="backlog_type">
+                    </div>
+                    <div class="form-group">
+                      <label for="backlog_code">{{ "backlogDev.form.code" | translate }}</label>
+                      <input type="text" formControlName="backlog_code" name="backlog_code" class="form-control"
+                        id="backlog_code">
+                    </div>
+                    <div class="form-group">
+                      <label for="backlog_bpro">{{ "backlogDev.form.bpro" | translate }}</label>
+                      <input type="text" formControlName="backlog_bpro" name="backlog_bpro" class="form-control"
+                        id="backlog_bpro">
+                    </div>
+                    <div class="form-group">
+                      <label for="backlog_kickoff">{{ "backlogDev.form.kickoff" | translate }}</label>
+                      <input type="text" formControlName="backlog_kickoff" name="backlog_kickoff" class="form-control" id="backlog_kickoff">
+                    </div>
+                  </div>
+                  <div style="width: 600px;">
+                    <div class="form-group">
+                      <label for="backlog_status">{{ "backlogDev.form.status" | translate }}</label>
+                      <input type="text" formControlName="backlog_status" name="backlog_status"
+                      class="form-control" id="backlog_status">
+                    </div>
+                    <div class="">
+                      <label for="backlog_start">{{ "backlogDev.form.start" | translate }}</label>
+                      <div class="d-flex gap-3">
+                        <div>
+                          <input type="date" formControlName="backlog_start" name="backlog_start" class="form-control" id="backlog_start" min="{{minDate | date:'yyyy-MM-dd'}}" [ngClass]="{ 'is-invalid' : editBacklogDevForm.controls['backlog_start'].touched && editBacklogDevForm.controls['backlog_start'].errors}">
+                          <div *ngIf="editBacklogDevForm.controls['backlog_start'].touched && editBacklogDevForm.controls['backlog_start'].errors" class="text-danger">
+                            <div *ngIf="editBacklogDevForm.controls['backlog_start'].touched && editBacklogDevForm.controls['backlog_start'].errors['required']">
+                              {{ "backlogDev.form.start" | translate }} {{ "form.validation_required" | translate }}
+                            </div>
+                          </div>
+                        </div>
+                        <i class="fas fa-minus align-middle mt-2"></i>
+                        <div>
+                          <input type="date" formControlName="backlog_end" name="backlog_end" class="form-control" id="backlog_end" min="{{minDate | date:'yyyy-MM-dd'}}" [ngClass]="{ 'is-invalid' : (editBacklogDevForm.controls['backlog_end'].touched && editBacklogDevForm.controls['backlog_end'].errors) || editBacklogDevForm.errors}">
+                          <div *ngIf="editBacklogDevForm.controls['backlog_end'].touched && editBacklogDevForm.controls['backlog_end'].errors" class="text-danger justify-content-end">
+                            <div *ngIf="editBacklogDevForm.controls['backlog_end'].touched && editBacklogDevForm.controls['backlog_end'].errors['required']">
+                              {{ "backlogDev.form.end" | translate }} {{ "form.validation_required" | translate }}
+                            </div>
+                          </div>
+                          <div *ngIf="editBacklogDevForm.errors && editBacklogDevForm.touched" class="text-danger justify-content-end">
+                            {{ "backlogDev.form.end" | translate }} {{ "form.invalid" | translate }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="">
+                      <label for="disabledTextInput" class="form-label mb-0">PIC PM</label>
+                      <select class="input-group form-select col-10">
+                        <option [value]="null" disabled>--{{ "backlogDev.form.choose_Dev" | translate }}--</option>
+                        <option *ngFor="let user of users" [value]="user.user_id">{{ user.user_name }}</option>
+                      </select>
+                    </div>
+                    <div class="">
+                      <label for="backlog_desc">{{ "backlogDev.form.desc" | translate }}</label>
+                      <textarea  formControlName="backlog_desc" name="backlog_desc" class="form-control" id="backlog_desc"></textarea>
+                    </div>
+                  </div>
+              </div>
+
+              <div class="container text-left mx-2" style="width: 50%;">
+                <h5 class="mx-2 mt-1">PIC DEV</h5>
+                <div class="d-flex justify-content-between border-bottom">
+                  <button class="btn" style="border: none;"></button>
+                </div>
+                <div class="form-row d-flex justify-content-around">
+                  <div class="col-md-1 col-1">No</div>
+                  <div class="col-10">PIC Name</div>
+                </div>
+                <div class="">
+                  <div formArrayName="pic_Devs">
+                    <div *ngFor="let pic of this.pic_Devs.controls; let i=index; last as isLast">
+                      <div class="d-flex flex-row gap-3 mb-1" [formGroupName]="i">
+                        <div class="col-md-1 col-1 text-center" style="border-radius: 5px; background-color: #cfcfcf;">
+                          <input type="text" class="form-control text-center" [value]="i+1" disabled>
+                        </div>
+                        <select class="input-group form-select col-10" formControlName="pic_Dev" name="pic_Dev" id="pic_Dev" style="width: 50%;">
+                          <option [value]="null" disabled>--{{ "backlogDev.form.choose_Dev" | translate }}--</option>
+                          <option *ngFor="let user of users" [value]="user.user_id">{{ user.user_name }}</option>
+                        </select>
+                        <div class="d-flex col-3">
+                          <button *ngIf="isLast" class="btn btn-sm btn-light ms-3" style="border: none;"
+                            (click)="addPICDev()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                          </button>
+                          <button *ngIf="pic_Devs.length > 1" class="btn btn-sm btn-light ms-3" style="border: none;"
+                            (click)="removePICDev(i)">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-right d-flex justify-content-end mt-3 mb-2">
+                <button type="button" class="btn btn-secondary bg-danger" style="border: none;" (click)="closeBacklogDevEdit()"><i class="fas fa-times"></i> {{ "button.close" | translate }}</button>
+                <button [disabled]="editBacklogDevForm.invalid || !editBacklogDevForm.dirty" type="submit" style="background-color: #0abe03; border: none;" class="ms-3 btn btn-primary">
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i> {{ "button.save_changes" | translate }}
+                </button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
